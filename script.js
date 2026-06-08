@@ -642,6 +642,7 @@ async function onConfirmUpload() {
         }
 
         alert(`Archivo cargado exitosamente (${result.registros_insertados} registros)`);
+        loadDashboardData();
     } catch (error) {
         showUploadError(error.message || 'Error al cargar el archivo');
     } finally {

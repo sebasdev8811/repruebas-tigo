@@ -6,6 +6,9 @@ from app.models import Usuario
 from app.routers import auth, usuarios, solicitudes, repruebas, danos, clientes, analista, garantias
 from app.core.security import decode_token
 from app.routers import exportes
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 # Crear tablas
 Base.metadata.create_all(bind=engine)
@@ -35,6 +38,19 @@ app.include_router(clientes.router)
 app.include_router(analista.router)
 app.include_router(garantias.router)
 app.include_router(exportes.router)
+
+
+# Servir archivos estáticos del frontend
+static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".")
+static_dir = os.path.abspath(static_dir)
+
+@app.get("/app", response_class=FileResponse)
+async def serve_frontend():
+    return FileResponse(os.path.join(static_dir, "index.html"))
+
+@app.get("/reset-password", response_class=FileResponse)
+async def serve_reset_password():
+    return FileResponse(os.path.join(static_dir, "reset-password.html"))
 
 
 @app.get("/")

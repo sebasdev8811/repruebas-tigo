@@ -9,6 +9,7 @@ from app.routers import exportes
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
+from fastapi.responses import RedirectResponse
 
 # Crear tablas
 Base.metadata.create_all(bind=engine)
@@ -44,9 +45,9 @@ app.include_router(exportes.router)
 static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".")
 static_dir = os.path.abspath(static_dir)
 
-@app.get("/app", response_class=FileResponse)
-async def serve_frontend():
-    return FileResponse(os.path.join(static_dir, "index.html"))
+@app.get("/")
+async def root():
+    return RedirectResponse(url="/app")
 
 @app.get("/reset-password", response_class=FileResponse)
 async def serve_reset_password():

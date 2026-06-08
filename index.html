@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Repruebas Técnicas - Tigo</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style-extended.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- LOGIN SCREEN -->
+    <div id="loginScreen" class="screen active">
+        <div class="login-container">
+            <div class="login-box">
+                <div class="logo">
+                    <span>tigo</span>
+                </div>
+                <h1>Sistema de Repruebas Técnicas</h1>
+                
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="username" placeholder="tu.email@tigo.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Contraseña</label>
+                        <input type="password" id="password" placeholder="••••••••" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">INGRESAR</button>
+                </form>
+                
+                <div class="login-links">
+                    <a href="#" onclick="openAccessRequestModal(event)">Solicitar acceso</a>
+                    <a href="#" onclick="openForgotPasswordModal(event)">¿Olvidaste tu contraseña?</a>
+                </div>
+                
+                <p class="footer-text">Acceso exclusivo para personal Tigo</p>
+                <p class="version">v1.0 · 2026</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="appScreen" class="screen">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="header-left">
+                <span class="logo-small">tigo</span>
+            </div>
+            <div class="header-center">
+                <span id="currentPageTitle">Dashboard</span>
+            </div>
+            <div class="header-right">
+                <button class="btn-icon">🔔</button>
+                <span id="notificationBadge" class="badge">3</span>
+                <div class="user-menu" id="userMenu">
+                    <button id="userMenuButton" class="btn-icon" type="button">👤</button>
+                    <div class="user-dropdown" id="userDropdown">
+                        <button type="button" id="userMenuChangePassword">Cambiar contraseña</button>
+                        <button type="button" id="userMenuLogout">Cerrar sesión</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- NAV TABS -->
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                🏠 Inicio
+            </button>
+            <button class="nav-tab" data-tab="usuarios" style="display:none;">
+                👥 Usuarios
+            </button>
+            <button class="nav-tab" data-tab="carga">
+                📊 Analista
+            </button>
+            <button class="nav-tab" data-tab="garantias">
+                🛡️ Garantías
+            </button>
+            <button class="nav-tab" data-tab="exportes">
+                ⬇️ Exportes
+            </button>
+            <button class="nav-tab" data-tab="reportes">
+                📊 Reportes
+            </button>
+        </nav>
+
+        <!-- CONTENT AREA -->
+        <div class="content-area">
+            
+            <!-- DASHBOARD TAB -->
+            <div id="dashboardTab" class="tab-content active">
+                <div class="dashboard-header">
+                    <div class="user-info">
+                        <div class="avatar" id="userAvatar">JG</div>
+                        <div>
+                            <h2 id="userName">Juan García</h2>
+                            <p id="userRolZona">Cargando...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-summary">
+                    <h3>Resumen del período</h3>
+                    <div class="summary-grid">
+                        <div class="summary-card selectable active" data-metric="repruebas">
+                            <span class="number" id="repuebasCount">142</span>
+                            <span class="label">Repruebas</span>
+                        </div>
+                        <div class="summary-card selectable" data-metric="garantias">
+                            <span class="number" id="garantiasCount">38</span>
+                            <span class="label">Garantías</span>
+                        </div>
+                        <div class="summary-card selectable alert" data-action="alerts">
+                            <span class="number" id="alertasCount">5</span>
+                            <span class="label">Alertas</span>
+                        </div>
+                        
+                    </div>
+                </div>
+
+                <div class="dashboard-chart">
+                    <div id="dashboardTrendSection" class="dashboard-chart-section">
+                        <h3 id="dashboardChartTitle">Tendencia mensual</h3>
+                        <canvas id="trendChart"></canvas>
+                    </div>
+
+                    <div id="dashboardAlertsSection" class="dashboard-chart-section" style="display:none;">
+                        <h3>Alertas por tipo</h3>
+                        <canvas id="alertChart"></canvas>
+                    </div>
+
+                    <div id="dashboardExportSection" class="dashboard-chart-section" style="display:none;">
+                        <h3>Exportes por período</h3>
+                        <canvas id="exportChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MÓDULO ANALISTA TAB -->
+            <div id="cargaTab" class="tab-content">
+                <div class="tab-header">
+                    <h2>← Módulo Analista</h2>
+                </div>
+
+                <!-- Sección 1: Carga de repruebas -->
+                <section class="analista-section">
+                    <h3>📁 Carga de repruebas</h3>
+                    <div class="upload-section">
+                        <p>Sube el archivo de repruebas del período</p>
+
+                        <div class="drop-zone" id="dropZone">
+                            <p>📄</p>
+                            <p>Arrastra tu archivo aquí</p>
+                            <p>o usa el botón de abajo</p>
+                        </div>
+
+                        <input type="file" id="fileInput" accept=".csv,.xlsx,.xls" style="display:none">
+                        <button class="btn-primary" type="button" onclick="document.getElementById('fileInput').click()">
+                            Seleccionar archivo
+                        </button>
+
+                        <div id="fileInfo" class="file-info" style="display:none;">
+                            <p id="fileName"></p>
+                            <button class="btn-remove" type="button" id="removeFileBtn">✕</button>
+                        </div>
+
+                        <div id="uploadProgress" class="progress-section" style="display:none;">
+                            <p>Progreso de carga</p>
+                            <div class="progress-bar">
+                                <div id="progressFill" class="progress-fill"></div>
+                            </div>
+                            <p id="progressText">0%</p>
+                        </div>
+
+                        <div id="uploadValidation" class="validation-box" style="display:none;">
+                            <div id="validationContent"></div>
+                        </div>
+
+                        <button id="confirmUploadBtn" class="btn-primary" type="button" style="display:none; margin-top: 20px;">
+                            CONFIRMAR CARGA
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Sección 2: Gráficas (solo analista/supervisor, tras carga) -->
+                <section id="analistaChartsSection" class="analista-section analista-role-only" style="display:none;">
+                    <h3>📈 Resultados de repruebas</h3>
+                    <div class="analista-charts-layout">
+                        <div class="analista-chart-box">
+                            <canvas id="repruebasDonutChart"></canvas>
+                        </div>
+                        <div id="repruebasSummaryCards" class="analista-summary-cards"></div>
+                    </div>
+                </section>
+
+                <!-- Sección 3: Fallas masivas -->
+                <section id="analistaFallasSection" class="analista-section analista-role-only" style="display:none;">
+                    <h3>🚨 Fallas masivas detectadas</h3>
+                    <div id="fallasMasivasContainer">
+                        <p class="analista-empty">Cargando fallas masivas...</p>
+                    </div>
+                </section>
+
+                <!-- Sección 4: Historial de gestiones -->
+                <section id="analistaHistorialSection" class="analista-section analista-role-only" style="display:none;">
+                    <h3>📋 Historial de gestiones</h3>
+                    <div id="gestionesHistorialContainer">
+                        <p class="analista-empty">Cargando historial...</p>
+                    </div>
+                </section>
+
+                <!-- Sección 5: Carga de datos maestros (solo supervisor) -->
+<section id="cargaDatosMaestrosSection" class="analista-section" style="display:none;">
+    <h3>📂 Carga de datos maestros</h3>
+    <p style="color:#666; margin-bottom:20px; font-size:14px;">Solo disponible para supervisores</p>
+
+    <!-- Daños Pendientes -->
+    <div class="upload-section" style="margin-bottom:20px;">
+        <h4 style="color:#003d82; margin-bottom:10px;">⚠️ Daños Pendientes</h4>
+        <p style="font-size:13px; color:#666; margin-bottom:10px;">Columnas requeridas: pedido_id, tipo_falla, cedula_cliente, estado, ciudad, departamento, barrio, nodo, cmts, amplificador, tap</p>
+        <input type="file" id="fileDanosPendientes" accept=".csv,.xlsx,.xls" style="display:none">
+        <button class="btn-primary" type="button" onclick="document.getElementById('fileDanosPendientes').click()" style="width:auto; padding:10px 20px; margin-bottom:10px;">Seleccionar archivo</button>
+        <span id="fileDanosPendientesNombre" style="margin-left:10px; font-size:13px; color:#333;"></span>
+        <div id="resultDanosPendientes" style="margin-top:10px;"></div>
+        <button class="btn-success" type="button" id="btnCargarDanosPendientes" onclick="cargarDatosMaestros('danos-pendientes')" style="display:none; width:auto; padding:10px 20px; margin-top:10px;">📥 Cargar daños pendientes</button>
+    </div>
+
+    <!-- Daños Cerrados -->
+    <div class="upload-section">
+        <h4 style="color:#003d82; margin-bottom:10px;">✅ Daños Cerrados</h4>
+        <p style="font-size:13px; color:#666; margin-bottom:10px;">Columnas requeridas: pedido_id, tipo_falla, cedula_cliente, ciudad, departamento, barrio, nodo, cmts, amplificador, tap</p>
+        <input type="file" id="fileDanosCerrados" accept=".csv,.xlsx,.xls" style="display:none">
+        <button class="btn-primary" type="button" onclick="document.getElementById('fileDanosCerrados').click()" style="width:auto; padding:10px 20px; margin-bottom:10px;">Seleccionar archivo</button>
+        <span id="fileDanosCerradosNombre" style="margin-left:10px; font-size:13px; color:#333;"></span>
+        <div id="resultDanosCerrados" style="margin-top:10px;"></div>
+        <button class="btn-success" type="button" id="btnCargarDanosCerrados" onclick="cargarDatosMaestros('danos-cerrados')" style="display:none; width:auto; padding:10px 20px; margin-top:10px;">📥 Cargar daños cerrados</button>
+    </div>
+</section>
+            </div>
+
+            <!-- MÓDULO GARANTÍAS TAB -->
+            <div id="garantiasTab" class="tab-content">
+                <div class="tab-header">
+                    <h2>← Módulo Garantías</h2>
+                </div>
+
+                <!-- Sección 1: Pedidos pendientes -->
+                <section class="garantias-section">
+                    <h3>📋 Pedidos con falla para gestión de garantía</h3>
+                    <p class="garantias-subtitle">Daños cerrados con reprueba de falla física o lógica</p>
+                    <div id="garantiasPendientesContainer">
+                        <p class="garantias-empty">Cargando pedidos pendientes...</p>
+                    </div>
+                </section>
+
+                <!-- Sección 2: Historial -->
+                <section class="garantias-section">
+                    <h3>📋 Historial de gestiones de garantía</h3>
+                    <div id="garantiasHistorialContainer">
+                        <p class="garantias-empty">Cargando historial...</p>
+                    </div>
+                </section>
+
+                <!-- Sección 3: Resumen -->
+                <section class="garantias-section">
+                    <h3>📊 Resumen</h3>
+                    <div id="garantiasResumenCards" class="garantias-resumen-grid">
+                        <div class="garantias-resumen-card garantias-card-pendiente">
+                            <span class="count" id="garantiasResumenPendientes">0</span>
+                            <span class="label">Pendientes</span>
+                        </div>
+                        <div class="garantias-resumen-card garantias-card-escalada">
+                            <span class="count" id="garantiasResumenEscaladas">0</span>
+                            <span class="label">Escaladas</span>
+                        </div>
+                        <div class="garantias-resumen-card garantias-card-no-escalada">
+                            <span class="count" id="garantiasResumenNoEscaladas">0</span>
+                            <span class="label">No escaladas</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+           <!-- EXPORTES TAB -->
+<div id="exportesTab" class="tab-content">
+    <div class="tab-header">
+        <h2>← Módulo de Exportes</h2>
+    </div>
+
+    <p class="subtitle">Configura los parámetros de exportación</p>
+
+    <div class="export-form">
+        <div class="form-group">
+            <label>Tipo de exportación</label>
+            <div class="export-options">
+                <button class="export-btn active" data-format="repruebas">Repruebas</button>
+                <button class="export-btn" data-format="fallas-masivas">Fallas Masivas</button>
+                <button class="export-btn" data-format="garantias">Garantías</button>
+            </div>
+        </div>
+
+        <div id="exportFechasSection">
+            <div class="form-group">
+                <label>Fecha inicio</label>
+                <input type="date" id="exportStartDate" value="2026-01-01">
+            </div>
+
+            <div class="form-group">
+                <label>Fecha fin</label>
+                <input type="date" id="exportEndDate" value="2026-12-31">
+            </div>
+        </div>
+
+        <div class="export-info">
+            <p id="exportInfo">Selecciona el tipo de exportación y el período</p>
+        </div>
+
+        <button id="exportBtn" class="btn-success" onclick="ejecutarExporte()">📥 EXPORTAR EXCEL</button>
+
+        <div id="exportSuccess" class="success-message" style="display:none;">
+            ✅ Exportación realizada con éxito
+        </div>
+
+        <div id="exportError" class="validation-error" style="display:none; margin-top:15px;">
+        </div>
+    </div>
+</div>
+
+            <!-- REPORTES TAB -->
+            <div id="reportesTab" class="tab-content">
+                <div class="tab-header">
+                    <h2>← Módulo de Reportes</h2>
+                </div>
+
+                <div class="report-filters">
+                    <button class="report-filter active" data-period="semana" onclick="onReportFilterChange(event)">Semana</button>
+                    <button class="report-filter" data-period="mes" onclick="onReportFilterChange(event)">Mes</button>
+                    <button class="report-filter" data-period="trimestre" onclick="onReportFilterChange(event)">Trimestre</button>
+                </div>
+
+                <div class="report-summary">
+                    <div class="report-card selectable active" data-metric="repruebas">
+                        <span class="report-number">142</span>
+                        <span class="report-label">Repruebas</span>
+                    </div>
+                    <div class="report-card selectable" data-metric="garantias">
+                        <span class="report-number">38</span>
+                        <span class="report-label">Garantías</span>
+                    </div>
+                    <div class="report-card selectable alert" data-action="alerts">
+                        <span class="report-number">5</span>
+                        <span class="report-label">Fallas mas.</span>
+                    </div>
+                </div>
+
+                <div class="report-charts">
+                    <div class="chart-container" data-metric="repruebas">
+                        <h3>Repruebas por semana</h3>
+                        <canvas id="weekChart"></canvas>
+                    </div>
+
+                    <div class="chart-container" data-metric="garantias" style="display:none;">
+                        <h3>Distribución garantías</h3>
+                        <canvas id="garantiasChart"></canvas>
+                    </div>
+                </div>
+
+                <div id="reportAlertsSection" class="alerts-section" style="display:none;">
+                    <h3 id="alertsTitle">🚨 Alertas de fallas masivas</h3>
+                    <div class="alerts-list">
+                        <div class="alert-item critical" data-metric="repruebas">
+                            <strong>Zona Norte · TV Fibra</strong>
+                            <p>12 equipos · Crítico · 2025-03-08</p>
+                        </div>
+                        <div class="alert-item moderate" data-metric="garantias">
+                            <strong>Zona Sur · Internet</strong>
+                            <p>7 equipos · Moderado · 2025-03-07</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- USUARIOS TAB (Solo supervisores) -->
+            <div id="usuariosTab" class="tab-content">
+                <div class="tab-header">
+                    <h2>← Gestión de Usuarios</h2>
+                </div>
+
+                <div class="usuarios-section">
+                    <div class="usuarios-toolbar">
+                        <button class="btn-primary" onclick="openNewUserModal()">➕ Crear Usuario</button>
+                        <button class="btn-secondary" onclick="loadUserRequests()">📋 Solicitudes Pendientes</button>
+                    </div>
+
+                    <div id="usuariosContainer" class="usuarios-list">
+                        <p>Cargando usuarios...</p>
+                    </div>
+
+                    <div id="solicitudesContainer" class="solicitudes-list" style="display:none;">
+                        <h3>Solicitudes de Acceso Pendientes</h3>
+                        <div id="solicitudesList"></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ACCESS REQUEST MODAL -->
+    <div id="accessRequestModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Solicitar Acceso al Sistema</h2>
+                <button class="modal-close" onclick="closeAccessRequestModal()">✕</button>
+            </div>
+            <form id="accessRequestForm" onsubmit="submitAccessRequest(event)">
+                <div class="form-group">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="accessName" placeholder="Tu nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="accessEmail" placeholder="tu.email@empresa.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Zona</label>
+                    <select id="accessZona" required>
+                        <option value="">Selecciona tu zona</option>
+                        <option value="Norte">Zona Norte</option>
+                        <option value="Sur">Zona Sur</option>
+                        <option value="Centro">Zona Centro</option>
+                        <option value="Nacional">Nacional</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Rol Solicitado</label>
+                    <select id="accessRol" required>
+                        <option value="">Selecciona el rol</option>
+                        <option value="analista">Analista</option>
+                        <option value="garantias">Garantías</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Motivo</label>
+                    <textarea id="accessMotivo" placeholder="¿Por qué necesitas acceso?" required></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Enviar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL OLVIDÉ CONTRASEÑA -->
+<div id="forgotPasswordModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+    <div style="background:white; padding:40px; border-radius:16px; width:100%; max-width:400px; text-align:center;">
+        <h2 style="color:#003d82; margin-bottom:10px;">¿Olvidaste tu contraseña?</h2>
+        <p style="color:#666; margin-bottom:20px; font-size:14px;">Ingresa tu email y te enviaremos un enlace para restablecerla.</p>
+        <div id="forgotPasswordMessage" style="display:none; margin-bottom:15px;"></div>
+        <input type="email" id="forgotPasswordEmail" placeholder="tu@email.com" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:8px; font-size:14px; margin-bottom:15px;">
+        <button onclick="submitForgotPassword()" style="width:100%; padding:14px; background:#003d82; color:white; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; margin-bottom:10px;">ENVIAR ENLACE</button>
+        <button onclick="closeForgotPasswordModal()" style="width:100%; padding:12px; background:white; color:#003d82; border:2px solid #003d82; border-radius:8px; font-size:14px; cursor:pointer;">Cancelar</button>
+    </div>
+</div>
+
+    <!-- NEW USER MODAL -->
+    <div id="newUserModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Crear Nuevo Usuario</h2>
+                <button class="modal-close" onclick="closeNewUserModal()">✕</button>
+            </div>
+            <form id="newUserForm" onsubmit="submitNewUser(event)">
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="newUserName" placeholder="Nombre completo" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="newUserEmail" placeholder="email@tigo.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Rol</label>
+                    <select id="newUserRol" required>
+                        <option value="">Selecciona un rol</option>
+                        <option value="analista">Analista</option>
+                        <option value="garantias">Garantías</option>
+                        <option value="supervisor">Supervisor</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Zona</label>
+                    <select id="newUserZona" required>
+                        <option value="">Selecciona una zona</option>
+                        <option value="Norte">Zona Norte</option>
+                        <option value="Sur">Zona Sur</option>
+                        <option value="Centro">Zona Centro</option>
+                        <option value="Nacional">Nacional</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Crear Usuario</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PASSWORD CHANGE MODAL -->
+    <div id="passwordChangeModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cambiar Contraseña</h2>
+                <button class="modal-close" id="passwordChangeCloseBtn" type="button">✕</button>
+            </div>
+            <p>Debes cambiar tu contraseña antes de continuar.</p>
+            <div id="passwordChangeError" class="validation-box" style="display:none; margin-bottom: 15px; color: #e74c3c;"></div>
+            <form id="passwordChangeForm">
+                <div class="form-group">
+                    <label>Contraseña actual</label>
+                    <input type="password" id="currentPassword" placeholder="Contraseña actual" required>
+                </div>
+                <div class="form-group">
+                    <label>Nueva contraseña</label>
+                    <input type="password" id="newPassword" placeholder="Nueva contraseña" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirmar nueva contraseña</label>
+                    <input type="password" id="confirmNewPassword" placeholder="Repite la nueva contraseña" required>
+                </div>
+                <button type="submit" class="btn-primary">Guardar y continuar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- GESTIÓN GARANTÍA MODAL -->
+    <div id="gestionGarantiaModal" class="modal" style="display:none;">
+        <div class="modal-content modal-content-wide">
+            <div class="modal-header">
+                <h2>Gestionar garantía</h2>
+                <button class="modal-close" type="button" onclick="closeGestionGarantiaModal()">✕</button>
+            </div>
+
+            <div id="gestionGarantiaInfo" class="gestion-garantia-info"></div>
+
+            <form id="gestionGarantiaForm" onsubmit="submitGestionGarantia(event)">
+                <div class="form-group">
+                    <label>Observaciones de garantía</label>
+                    <textarea id="garantiaObservaciones" placeholder="Registra las observaciones de la gestión..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="garantiaEstado" onchange="onGarantiaEstadoChange()">
+                        <option value="no_escalada">No escalada</option>
+                        <option value="escalada">Escalada</option>
+                    </select>
+                </div>
+                <div id="garantiaEscaladoMsg" class="gestion-escalado-msg" style="display:none;">
+                    Se generará un ticket automáticamente
+                </div>
+                <button type="submit" class="btn-primary">Guardar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- GESTIÓN FALLA MASIVA MODAL -->
+    <div id="gestionFallaModal" class="modal" style="display:none;">
+        <div class="modal-content modal-content-wide">
+            <div class="modal-header">
+                <h2>Gestionar falla masiva</h2>
+                <button class="modal-close" type="button" onclick="closeGestionFallaModal()">✕</button>
+            </div>
+
+            <div id="gestionFallaInfo" class="gestion-falla-info"></div>
+
+            <div class="gestion-pedidos-list">
+                <h4>Pedidos afectados</h4>
+                <div id="gestionPedidosList"></div>
+            </div>
+
+            <form id="gestionFallaForm" onsubmit="submitGestionFalla(event)">
+                <div class="form-group">
+                    <label>Observaciones</label>
+                    <textarea id="gestionObservaciones" placeholder="Describe lo encontrado en la gestión..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="gestionEstado" onchange="onGestionEstadoChange()">
+                        <option value="no_gestionado">No gestionado</option>
+                        <option value="gestionado">Gestionado</option>
+                        <option value="escalado">Escalado</option>
+                    </select>
+                </div>
+                <div id="gestionEscaladoMsg" class="gestion-escalado-msg" style="display:none;">
+                    Se generará un ticket automáticamente
+                </div>
+                <button type="submit" class="btn-primary">Guardar gestión</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- APPROVAL MODAL -->
+    <div id="approvalModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Usuario creado</h2>
+                <button class="modal-close" onclick="hideApprovalModal()">✕</button>
+            </div>
+            <p>La solicitud fue aprobada. Usa esta contraseña temporal para que el usuario ingrese y cambie su contraseña.</p>
+            <div id="approvalPassword" class="approval-password"></div>
+            <div class="modal-actions">
+                <button id="approvalCopyBtn" class="btn-secondary" type="button">Copiar contraseña</button>
+                <button class="btn-primary" type="button" onclick="hideApprovalModal()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

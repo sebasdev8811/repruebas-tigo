@@ -1,0 +1,26 @@
+# Variables de entorno (contiene contraseñas)
+backend/.env
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+venv/
+env/
+
+# Base de datos
+*.db
+*.sqlite
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

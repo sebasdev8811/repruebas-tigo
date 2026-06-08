@@ -1,0 +1,661 @@
+/* ==================== MODALS ====================  */
+
+.modal {
+    display: none !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal.active,
+.modal[style*="display: flex"] {
+    display: flex !important;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #003d82;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal-close:hover {
+    color: #e74c3c;
+}
+
+.password-change-note {
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #333;
+}
+
+#passwordChangeError {
+    background: #fdecea;
+    border: 1px solid #f5c6cb;
+    color: #a94442;
+    padding: 10px;
+    border-radius: 6px;
+    display: none;
+}
+
+.user-menu {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.user-menu-button {
+    position: relative;
+}
+
+.user-dropdown {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 8px);
+    width: 200px;
+    background: #ffffff;
+    border: 1px solid #e1e4ea;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.12);
+    z-index: 1100;
+    overflow: hidden;
+}
+
+.user-dropdown.active {
+    display: block;
+}
+
+.user-dropdown button {
+    width: 100%;
+    padding: 12px 16px;
+    text-align: left;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    color: #1e293b;
+}
+
+.user-dropdown button:hover {
+    background: #f2f6ff;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.approval-password {
+    margin-top: 10px;
+    padding: 12px 16px;
+    background: #f4f9ff;
+    border: 1px solid #c9e2ff;
+    border-radius: 8px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    word-break: break-all;
+}
+
+/* ==================== USUARIOS ====================  */
+
+.usuarios-toolbar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.usuarios-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.usuarios-table {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.usuario-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.usuario-info {
+    flex: 1;
+}
+
+.usuario-info strong {
+    display: block;
+    font-size: 16px;
+    color: #333;
+}
+
+.usuario-info p {
+    margin: 3px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.usuario-status {
+    min-width: 100px;
+    text-align: center;
+    font-weight: bold;
+    margin: 0 15px;
+}
+
+.usuario-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-small {
+    padding: 8px 12px;
+    font-size: 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-danger {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c0392b;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background: #00a8e8;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* ==================== SOLICITUDES ====================  */
+
+.solicitud-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.solicitud-info {
+    flex: 1;
+}
+
+.solicitud-info strong {
+    display: block;
+    font-size: 16px;
+    color: #333;
+}
+
+.solicitud-info p {
+    margin: 3px 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.solicitud-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-success {
+    background: #27ae60;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.btn-success:hover {
+    background: #229954;
+}
+
+/* ==================== FORM IMPROVEMENTS ====================  */
+
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 80px;
+}
+
+textarea:focus {
+    outline: none;
+    border-color: #00a8e8;
+    box-shadow: 0 0 5px rgba(0, 168, 232, 0.3);
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: inherit;
+}
+
+select:focus {
+    outline: none;
+    border-color: #00a8e8;
+    box-shadow: 0 0 5px rgba(0, 168, 232, 0.3);
+}
+
+/* ==================== MÓDULO ANALISTA ==================== */
+
+.analista-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e8ecf1;
+}
+
+.analista-section:last-child {
+    border-bottom: none;
+}
+
+.analista-section h3 {
+    color: #003d82;
+    margin-bottom: 16px;
+    font-size: 18px;
+}
+
+.analista-empty {
+    color: #666;
+    font-size: 14px;
+    padding: 12px 0;
+}
+
+.analista-charts-layout {
+    display: grid;
+    grid-template-columns: minmax(260px, 360px) 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+.analista-chart-box {
+    background: white;
+    border: 1px solid #e1e4ea;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 360px;
+}
+
+.analista-summary-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.analista-summary-card {
+    background: white;
+    border: 1px solid #e1e4ea;
+    border-radius: 10px;
+    padding: 16px;
+    text-align: center;
+    border-top: 4px solid #ccc;
+}
+
+.analista-summary-card .count {
+    display: block;
+    font-size: 28px;
+    font-weight: 700;
+    color: #003d82;
+}
+
+.analista-summary-card .label {
+    display: block;
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
+}
+
+.analista-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.analista-data-table th,
+.analista-data-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eef1f5;
+    font-size: 14px;
+}
+
+.analista-data-table th {
+    background: #f4f7fb;
+    color: #003d82;
+    font-weight: 600;
+}
+
+.analista-data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.estado-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.estado-no_gestionado {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.estado-gestionado {
+    background: #d4edda;
+    color: #155724;
+}
+
+.estado-escalado {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.estado-pendiente {
+    background: #e8f4fd;
+    color: #0052b4;
+}
+
+.modal-content-wide {
+    max-width: 640px;
+}
+
+.gestion-falla-info {
+    background: #f4f9ff;
+    border: 1px solid #c9e2ff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+    font-size: 14px;
+}
+
+.gestion-falla-info p {
+    margin: 4px 0;
+}
+
+.gestion-pedidos-list {
+    margin-bottom: 20px;
+}
+
+.gestion-pedidos-list h4 {
+    margin: 0 0 10px;
+    color: #333;
+    font-size: 14px;
+}
+
+.gestion-pedido-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #fafbfc;
+    border: 1px solid #eef1f5;
+    border-radius: 6px;
+    margin-bottom: 6px;
+    font-size: 13px;
+}
+
+.gestion-escalado-msg {
+    background: #fff8e6;
+    border: 1px solid #f1c40f;
+    color: #856404;
+    padding: 10px 12px;
+    border-radius: 6px;
+    margin-bottom: 16px;
+    font-size: 13px;
+}
+
+.analista-alert-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .analista-charts-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .analista-data-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+/* ==================== MÓDULO GARANTÍAS ==================== */
+
+.garantias-section {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid #e8ecf1;
+}
+
+.garantias-section:last-child {
+    border-bottom: none;
+}
+
+.garantias-section h3 {
+    color: #003d82;
+    margin-bottom: 8px;
+    font-size: 18px;
+}
+
+.garantias-subtitle {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.garantias-empty {
+    color: #666;
+    font-size: 14px;
+    padding: 12px 0;
+}
+
+.garantias-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.garantias-data-table th,
+.garantias-data-table td {
+    padding: 12px 14px;
+    text-align: left;
+    border-bottom: 1px solid #eef1f5;
+    font-size: 14px;
+}
+
+.garantias-data-table th {
+    background: #f4f7fb;
+    color: #003d82;
+    font-weight: 600;
+}
+
+.garantias-data-table tr:last-child td {
+    border-bottom: none;
+}
+
+.garantias-resumen-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.garantias-resumen-card {
+    background: white;
+    border: 1px solid #e1e4ea;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    border-top: 4px solid #ccc;
+}
+
+.garantias-resumen-card .count {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    color: #003d82;
+}
+
+.garantias-resumen-card .label {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    margin-top: 6px;
+}
+
+.garantias-card-pendiente {
+    border-top-color: #00a8e8;
+}
+
+.garantias-card-escalada {
+    border-top-color: #f39c12;
+}
+
+.garantias-card-no-escalada {
+    border-top-color: #27ae60;
+}
+
+.gestion-garantia-info {
+    background: #f4f9ff;
+    border: 1px solid #c9e2ff;
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.gestion-garantia-info p {
+    margin: 4px 0;
+}
+
+.gestion-garantia-info .reprueba-estado {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.reprueba-estado-fisica {
+    background: #fdebd0;
+    color: #d35400;
+}
+
+.reprueba-estado-logica {
+    background: #fef9e7;
+    color: #b7950b;
+}
+
+.reprueba-estado-mixta {
+    background: #fadbd8;
+    color: #c0392b;
+}
+
+.estado-escalada {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.estado-no_escalada {
+    background: #d4edda;
+    color: #155724;
+}
+
+.garantias-alert-success {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    padding: 14px 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .garantias-resumen-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .garantias-data-table {
+        display: block;
+        overflow-x: auto;
+    }
+}

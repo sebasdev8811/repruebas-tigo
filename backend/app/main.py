@@ -42,32 +42,24 @@ app.include_router(exportes.router)
 
 
 # Servir archivos estáticos del frontend
-static_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", ".")
-static_dir = os.path.abspath(static_dir)
+static_dir = "/app"
+app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+@app.get("/app", response_class=FileResponse)
+async def serve_frontend():
+    return FileResponse("/app/index.html")
+
+@app.get("/reset-password", response_class=FileResponse)
+async def serve_reset_password():
+    return FileResponse("/app/reset-password.html")
 
 @app.get("/")
 async def root():
     return RedirectResponse(url="/app")
 
-@app.get("/reset-password", response_class=FileResponse)
-async def serve_reset_password():
-    return FileResponse(os.path.join(static_dir, "reset-password.html"))
-
-
-@app.get("/")
-async def root():
-    """Endpoint de prueba"""
-    return {
-        "mensaje": "Bienvenido al Sistema de Repruebas Técnicas Tigo",
-        "version": "1.0.0"
-    }
-
-
 @app.get("/health")
 async def health_check():
-    """Endpoint para verificar que la API está funcionando"""
     return {"status": "ok"}
-
 
 if __name__ == "__main__":
     import uvicorn

@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Repruebas Técnicas - Tigo</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="style-extended.css">
+    <link rel="stylesheet" href="/static/style.css">
+    <link rel="stylesheet" href="/static/style-extended.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -339,7 +339,7 @@
                 <div class="report-filters">
                     <button class="report-filter active" data-period="semana" onclick="onReportFilterChange(event)">Semana</button>
                     <button class="report-filter" data-period="mes" onclick="onReportFilterChange(event)">Mes</button>
-                    <button class="report-filter" data-period="trimestre" onclick="onReportFilterChange(event)">Trimestre</button>
+                <button class="report-filter" data-period="trimestre" onclick="onReportFilterChange(event)">Trimestre</button>
                 </div>
 
                 <div class="report-summary">
@@ -614,6 +614,6 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <script src="/static/script.js"></script>
 </body>
 </html>

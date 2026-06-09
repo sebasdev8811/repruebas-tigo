@@ -1110,7 +1110,6 @@ function closeNewUserModal() {
     document.getElementById('newUserModal').style.display = 'none';
     document.getElementById('newUserForm').reset();
 }
-
 async function submitNewUser(event) {
     event.preventDefault();
 
@@ -1127,14 +1126,18 @@ async function submitNewUser(event) {
             body: JSON.stringify(data)
         });
 
-        alert(`✅ Usuario creado. Contraseña temporal ha sido generada.`);
         closeNewUserModal();
         loadUsers();
+        
+        if (result.contraseña_temporal) {
+            showApprovalModal(result.contraseña_temporal);
+        } else {
+            alert(`✅ Usuario creado exitosamente.`);
+        }
     } catch (error) {
         alert(`❌ ${error.message}`);
     }
 }
-
 async function loadUsers() {
     const container = document.getElementById('usuariosContainer');
     

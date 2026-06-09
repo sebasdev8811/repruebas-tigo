@@ -57,7 +57,7 @@ def generate_temp_password(length: int = 12) -> str:
     return ''.join(secrets.choice(characters) for _ in range(length))
 
 
-@router.post("", response_model=UsuarioResponse)
+@router.post("", response_model=dict)
 async def crear_usuario(
     usuario_data: UsuarioCreate,
     db: Session = Depends(get_db),
@@ -88,7 +88,17 @@ async def crear_usuario(
     db.commit()
     db.refresh(nuevo_usuario)
     
-    return nuevo_usuario
+    return {
+        "id": nuevo_usuario.id,
+        "nombre": nuevo_usuario.nombre,
+        "email": nuevo_usuario.email,
+        "rol": nuevo_usuario.rol,
+        "zona": nuevo_usuario.zona,
+        "activo": nuevo_usuario.activo,
+        "debe_cambiar_password": nuevo_usuario.debe_cambiar_password,
+        "fecha_creacion": nuevo_usuario.fecha_creacion,
+        "contraseña_temporal": temp_password
+    }
 
 
 @router.get("", response_model=List[UsuarioResponse])

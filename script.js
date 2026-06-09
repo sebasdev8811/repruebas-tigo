@@ -1269,9 +1269,7 @@ async function fetchWithAuth(url, options = {}) {
         headers['Authorization'] = `Bearer ${appState.token}`;
     }
 
-    // Debug temporal
-    console.log('Token en appState:', appState.token);
-    console.log('Headers que se envían:', headers);
+    
 
     const response = await fetch(url, {
         ...options,

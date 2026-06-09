@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse
 import os
 from fastapi.responses import RedirectResponse
 
+
 # Crear tablas
 Base.metadata.create_all(bind=engine)
 
@@ -42,8 +43,10 @@ app.include_router(exportes.router)
 
 
 # Servir archivos estáticos del frontend
-static_dir = "/app"
-app.mount("/static", StaticFiles(directory=static_dir), name="static")
+static_dir = os.environ.get("STATIC_DIR", "")
+if static_dir and os.path.exists(static_dir):
+    from starlette.staticfiles import StaticFiles
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
 
 @app.get("/app", response_class=FileResponse)
 async def serve_frontend():

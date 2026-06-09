@@ -33,7 +33,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 ESTADOS_REPRUEBA = ["OK", "Falla física", "Falla lógica", "Falla física lógica"]
 ESTADOS_FALLA = ["Falla física", "Falla lógica", "Falla física lógica"]
-ELEMENTOS_RED = ["nodo", "cmts", "amplificador", "tap"]
+ELEMENTOS_RED = ["nodo", "cmts", "amplificador"]
 ESTADOS_GESTION = ["no_gestionado", "gestionado", "escalado"]
 
 
@@ -135,22 +135,23 @@ async def detectar_fallas_masivas(
         .all()
     )
 
-    agrupados: dict[tuple[str, str], set[int]] = defaultdict(set)
+    agrupados: dict[tuple[str, str, str], set[int]] = defaultdict(set)
 
     for reprueba, dano in registros:
         for elemento in ELEMENTOS_RED:
             valor = getattr(dano, elemento, None)
-            if valor and str(valor).strip():
-                agrupados[(elemento, str(valor).strip())].add(dano.pedido_id)
+            ciudad = getattr(dano, 'ciudad', None)
+        if valor and str(valor).strip() and ciudad:
+                agrupados[(elemento, str(valor).strip(), str(ciudad).strip())].add(dano.pedido_id)
 
     resultados = []
-    for (elemento_red, valor_elemento), pedidos in sorted(agrupados.items()):
+    for (elemento_red, valor_elemento, ciudad), pedidos in sorted(agrupados.items()):
         if len(pedidos) >= 3:
             pedido_ids = sorted(pedidos)
             resultados.append(
                 FallaMasivaItem(
                     elemento_red=elemento_red,
-                    valor_elemento=valor_elemento,
+                    valor_elemento=f"{valor_elemento} ({ciudad})",
                     total_pedidos=len(pedido_ids),
                     pedido_ids=pedido_ids,
                 )

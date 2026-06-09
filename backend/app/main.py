@@ -65,15 +65,6 @@ async def health_check():
     return {"status": "ok"}
 
 
-@app.get("/debug-path")
-async def debug_path():
-    import os
-    paths = {
-        "cwd": os.getcwd(),
-        "files_cwd": os.listdir(os.getcwd()),
-        "dirname": os.path.dirname(os.path.abspath(__file__))
-    }
-    return paths
 
 if __name__ == "__main__":
     import uvicorn
